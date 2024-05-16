@@ -1,0 +1,82 @@
+
+CREATE TABLE RACE
+(Race_Code VARCHAR(30) PRIMARY KEY,
+Race_Description VARCHAR(300)
+);
+
+CREATE TABLE LOCATIONS (
+    Location_ID INT PRIMARY KEY,
+    City_Name VARCHAR(50),
+    State_Province_Name VARCHAR(50),
+    Country_Name VARCHAR(50),
+    Developing_Flag BOOLEAN,
+    Wealth_Rank_Number INT
+);
+
+
+CREATE TABLE MEDICINE
+(Medicine_ID VARCHAR(20) PRIMARY KEY,
+ Standard_Industry_Number INT,
+ Name VARCHAR(100),
+ Company VARCHAR(100),
+ Active_Ingridient_Name VARCHAR(50)
+);
+
+
+CREATE TABLE DISEASE_TYPE
+(Disease_Type_Code VARCHAR(20) PRIMARY KEY,
+Disease_Type_Description VARCHAR(200),
+Exclusions_Other_Note Text
+);
+
+
+CREATE TABLE PERSON (
+    Person_id INT PRIMARY KEY,
+    Last_Name VARCHAR(50),
+    First_Name VARCHAR(50),
+    Gender VARCHAR(12),
+    Primary_location_ID INT ,
+    Race_CD VARCHAR(20) ,
+    FOREIGN KEY (Primary_location_ID) REFERENCES LOCATIONS(Location_ID) ON UPDATE CASCADE ON DELETE CASCADE,
+	FOREIGN KEY (Race_CD) REFERENCES RACE(Race_Code) ON UPDATE CASCADE ON DELETE CASCADE
+);
+
+
+CREATE TABLE DISEASE
+ (Disease_ID VARCHAR(50) PRIMARY KEY,
+ Disease_Name VARCHAR(200),
+  Intensity_Level_Qty float,
+  Disease_Type_Cd VARCHAR(20),
+ Source_Disease_Cd VARCHAR(30),
+   FOREIGN KEY (Disease_Type_Cd) REFERENCES DISEASE_TYPE(Disease_Type_Code) ON UPDATE CASCADE ON DELETE CASCADE
+   );
+
+
+CREATE TABLE INDICATION
+(Medicine_ID VARCHAR(20) ,
+Disease_ID VARCHAR(50) ,
+ Indication_Date date,
+ Effectiveness_Percent FLOAT,
+ FOREIGN KEY (Medicine_ID) REFERENCES MEDICINE(Medicine_ID) ON UPDATE CASCADE ON DELETE CASCADE,
+ FOREIGN KEY (Disease_ID) REFERENCES DISEASE(Disease_ID) ON UPDATE CASCADE ON DELETE CASCADE
+ );	
+ 
+ 
+ CREATE TABLE RACE_DISEASE_PROPENSITY
+(Race_Code VARCHAR(20),
+ Disease_ID VARCHAR(50) ,
+ Propensity_Value float,
+  FOREIGN KEY (Race_Code) REFERENCES RACE(Race_Code) ON UPDATE CASCADE ON DELETE CASCADE,
+ FOREIGN KEY (Disease_ID) REFERENCES DISEASE(Disease_ID) ON UPDATE CASCADE ON DELETE CASCADE
+ );
+ 
+ CREATE TABLE DISEASED_PATIENT
+(Person_ID INT ,
+Disease_ID VARCHAR(50),
+ Severity_Value FLOAT,
+ Start_date DATE,
+ End_Date DATE,
+ FOREIGN KEY (Person_ID) REFERENCES PERSON(Person_id) ON UPDATE CASCADE ON DELETE CASCADE,
+ FOREIGN KEY (Disease_ID) REFERENCES DISEASE(Disease_ID) ON UPDATE CASCADE ON DELETE CASCADE
+
+);
